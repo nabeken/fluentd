@@ -32,10 +32,15 @@ class TextParser
       end
     end
 
+    def configure(conf)
+      super
+      @supress_warn_unless_match = conf.has_key?('supress_warn_unless_match')
+    end
+
     def call(text)
       m = @regexp.match(text)
       unless m
-        $log.warn "pattern not match: #{text.inspect}"
+        $log.warn "pattern not match: #{text.inspect}" unless @supress_warn_unless_match
         return nil, nil
       end
 
